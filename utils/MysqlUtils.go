@@ -15,6 +15,7 @@ var db *sql.DB
 func InitMysql() {
 	fmt.Println("InitMysql...")
 	if db == nil {
+        //TODO: 配置化
 		db, _ = sql.Open("mysql", "root:jdtlh@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=true&loc=Local")
 		CreateTableWithUser()
 	}
@@ -24,10 +25,10 @@ func InitMysql() {
 func CreateTableWithUser() {
 	sql := `CREATE TABLE IF NOT EXISTS users(
 		id INT(4) PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		username VARCHAR(64) NOT NULL,
-		password VARCHAR(64),
-		status TINYINT(4),
-		createTime INT(10)
+		username VARCHAR(64) NOT NULL COMMENT "用户名",
+		password VARCHAR(64) COMMENT "md5加密",
+		status TINYINT(4) COMMENT "状态：0 正常，1 删除",
+		createTime INT(10) COMMENT "创建时间"
 	);`
 	ModifyDB(sql)
 }

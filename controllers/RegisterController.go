@@ -60,4 +60,6 @@ func RegisterPost(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{"code": 0, "message": "注册成功"})
 	}
+
+    //TODO：登录接口，jwt 认证
 }
