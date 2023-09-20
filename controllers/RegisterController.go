@@ -10,25 +10,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// 定义结构体接收json参数
+type userJson struct {
+	Username   string
+	Password   string
+	Repassword string
+}
+
 // 处理注册
 func RegisterPost(c *gin.Context) {
 	//获取表单信息
 	// username := c.PostForm("username")
 	// password := c.PostForm("password")
 	// repassword := c.PostForm("repassword")
-	type userJson struct {
-		Username   string
-		Password   string
-		Repassword string
-	}
+
 	var userParam userJson
-	err1 := c.ShouldBindJSON(&userParam)
-	if err1 != nil {
-		c.JSON(http.StatusOK, gin.H{"code": 400, "message": "解析失败"})
+
+	if errParam := c.ShouldBindJSON(&userParam); errParam != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "解析失败"})
 	}
 	username := userParam.Username
 	password := userParam.Password
 	repassword := userParam.Repassword
+
 	fmt.Println(username, password, repassword)
 
 	//注册之前先判断该用户名是否已经被注册，如果已经注册，返回错误
@@ -36,6 +40,11 @@ func RegisterPost(c *gin.Context) {
 	fmt.Println("id:", id)
 	if id > 0 {
 		c.JSON(http.StatusOK, gin.H{"code": 0, "message": "用户名已经存在", "username": username})
+		return
+	}
+
+	if password != repassword {
+		c.JSON(http.StatusBadRequest, gin.H{"code": 401, "message": "两次输入的密码不一致"})
 		return
 	}
 
