@@ -1,6 +1,0 @@
-# mysql配置
-mysql:
-    username: root
-    password: liuhaun123456
-    host: localhost
-    port: 3306

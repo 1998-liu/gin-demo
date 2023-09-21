@@ -3,6 +3,7 @@ package utils
 import (
 	"database/sql"
 	"fmt"
+	"gin-demo/config"
 	"log"
 
 	// 这个不加在编译的时候不会报错，但是在运行的时候就会报错,因为在编译的时候不需要用所以前面加_
@@ -15,8 +16,16 @@ var db *sql.DB
 func InitMysql() {
 	fmt.Println("InitMysql...")
 	if db == nil {
-        //TODO: 配置化
-		db, _ = sql.Open("mysql", "root:jdtlh@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=true&loc=Local")
+		conf := config.Conf
+		username := conf.GetString("mysql.username")
+		password := conf.GetString("mysql.password")
+		host := conf.GetString("mysql.host")
+		port := conf.GetString("mysql.port")
+		database := conf.GetString("mysql.database")
+		suffix := conf.GetString("mysql.suffix")
+		//TODO: 配置化
+		// db, _ = sql.Open("mysql", "root:jdtlh@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=true&loc=Local")
+		db, _ = sql.Open("mysql", username+":"+password+"@tcp("+host+":"+port+")/"+database+"?"+suffix)
 		CreateTableWithUser()
 	}
 }
