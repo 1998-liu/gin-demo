@@ -30,3 +30,16 @@ func (o OrderController) GetList(c *gin.Context) {
 	}
 	ReturnError(c, 4001, gin.H{"err": err})
 }
+
+func (o OrderController) Test(c *gin.Context) {
+	// logger.Write("日志信息", "user")
+	// defer func() {
+	// 	if err := recover(); err != nil {
+	// 		fmt.Println("捕获异常：", err)
+	// 	}
+	// }()
+	num1 := 4
+	num2 := 0
+	res := num1 / num2
+	ReturnError(c, 4004, res)
+}

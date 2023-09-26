@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"gin-demo/common/middleware/logger"
 	"gin-demo/controllers"
 	"net/http"
 
@@ -9,6 +10,11 @@ import (
 
 func InitRouter() *gin.Engine {
 	router := gin.Default()
+
+	//使用日志中间件
+	router.Use(gin.LoggerWithConfig(logger.LoggerToFile()))
+	router.Use(logger.Recover)
+
 	//注册
 	router.POST("/register", controllers.RegisterPost)
 
@@ -25,6 +31,7 @@ func InitRouter() *gin.Engine {
 	order := router.Group("/order")
 	{
 		order.POST("/list", controllers.OrderController{}.GetList)
+		order.GET("/test", controllers.OrderController{}.Test)
 	}
 	return router
 }
