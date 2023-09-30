@@ -37,6 +37,12 @@ func InitRouter() *gin.Engine {
 		})
 	}
 
+    activity := router.Group("/activity")
+    {
+        activity.POST("/add", controllers.ActivityController{}.AddActivity)
+        activity.GET("/del", controllers.ActivityController{}.DelActivity)
+    }
+
 	order := router.Group("/order")
 	{
 		order.POST("/list", controllers.OrderController{}.GetList)
