@@ -15,12 +15,13 @@ func InitRouter() *gin.Engine {
 	router.Use(gin.LoggerWithConfig(logger.LoggerToFile()))
 	router.Use(logger.Recover)
 
-	//注册
+	//注册测试
 	router.POST("/register", controllers.RegisterPost)
 
 	//路由组
 	user := router.Group("/user")
 	{
+        user.POST("/register", controllers.UserController{}.Register)
 		user.GET("/info", controllers.UserController{}.GetUserInfo)
 		user.POST("/list", controllers.UserController{}.GetUserList)
 		user.PUT("/add", func(ctx *gin.Context) {

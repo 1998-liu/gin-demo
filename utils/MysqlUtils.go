@@ -41,7 +41,7 @@ func CreateTableWithUser() {
 	ModifyDB(sql)
 }
 
-// 操作数据库
+// 原生sql操作数据库
 func ModifyDB(sql string, args ...interface{}) (int64, error) {
 	result, err := db.Exec(sql, args...)
 	if err != nil {

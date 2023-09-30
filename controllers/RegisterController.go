@@ -53,7 +53,7 @@ func RegisterPost(c *gin.Context) {
 	password = utils.MD5(password)
 	fmt.Println("md5后：", password)
 
-	user := models.User{0, username, password, 0, time.Now().Unix()}
+	user := models.UserTest{0, username, password, 0, time.Now().Unix()}
 	_, err := models.InsertUser(user)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"code": 0, "message": "注册失败"})

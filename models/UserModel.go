@@ -1,42 +1,35 @@
 package models
 
 import (
-	"fmt"
-	"gin-demo/utils"
+	"gin-demo/dao"
+	"time"
 )
 
 type User struct {
-	Id         int
-	Username   string
-	Password   string
-	Status     int //0:正常状态，1：删除
-	CreateTime int64
+	Id         int    `gorm:"column:id"`
+	Username   string `gorm:"column:username"`
+	Password   string `gorm:"column:password"`
+	AddTime    int64  `gorm:"column:addTime"`
+	UpdateTime int64  `gorm:"column:updateTime"`
 }
 
-// 插入
-func InsertUser(user User) (int64, error) {
-	return utils.ModifyDB("insert into users(username,password,status,createTime) values (?,?,?,?)",
-		user.Username, user.Password, user.Status, user.CreateTime)
+func (User) TableName() string {
+	return "user"
 }
 
-// 按条件查询
-func QueryUserWithCon(con string) int {
-	sql := fmt.Sprintf("select id from users %s", con)
-	fmt.Println("sql")
-	row := utils.QueryRowDB(sql)
-	id := 0
-	row.Scan(&id)
-	return id
+func (User) GetUserByUsername(username string) (User, error) {
+	var user User
+	err := dao.Db.Where("username=?", username).First(&user).Error
+	return user, err
 }
 
-// 根据用户名查询id
-func QueryUserWithUsername(username string) int {
-	sql := fmt.Sprintf("where username='%s'", username)
-	return QueryUserWithCon(sql)
-}
-
-// 根据用户名和密码，查询id
-func QueryUserWithParam(username, password string) int {
-	sql := fmt.Sprintf("where username='%s' and password='%s'", username, password)
-	return QueryUserWithCon(sql)
+func (User) AddUser(username, password string) (int, error) {
+	user := User{
+		Username:   username,
+		Password:   password,
+		AddTime:    time.Now().Unix(),
+		UpdateTime: time.Now().Unix(),
+	}
+	err := dao.Db.Create(&user).Error
+	return user.Id, err
 }

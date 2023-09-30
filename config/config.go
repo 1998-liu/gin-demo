@@ -14,7 +14,7 @@ func init() {
 	Conf.SetConfigFile("./config/config.yaml")
 
 	if err := Conf.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("Fatal error config file(database): %s", err))
+		panic(fmt.Errorf("Fatal error config file: %s", err))
 	}
 
 	go reloadConfig()
