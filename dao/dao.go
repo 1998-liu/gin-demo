@@ -28,4 +28,6 @@ func init() {
 	Db.DB().SetConnMaxLifetime(time.Hour)
 	//禁用表名的复数形式
 	Db.SingularTable(true)
+    //打印 sql 语句
+    Db.LogMode(true)
 }

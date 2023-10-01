@@ -23,6 +23,12 @@ func (User) GetUserByUsername(username string) (User, error) {
 	return user, err
 }
 
+func (User) GetUserById(uid int) (User, error) {
+	var user User
+	err := dao.Db.Where("id=?", uid).First(&user).Error
+	return user, err
+}
+
 func (User) AddUser(username, password string) (int, error) {
 	user := User{
 		Username:   username,

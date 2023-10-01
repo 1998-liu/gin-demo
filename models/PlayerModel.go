@@ -3,6 +3,8 @@ package models
 import (
 	"gin-demo/dao"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type Player struct {
@@ -27,6 +29,12 @@ func (Player) GetPlayers(aid int) ([]Player, error) {
 	return player, err
 }
 
+func (Player) GetPlayerById(pid int) (Player, error) {
+	var player Player
+	err := dao.Db.Where("id=?", pid).First(&player).Error
+	return player, err
+}
+
 // 添加参赛者
 func (Player) AddPlayer(aid int, ref, nickName, declaration, avatar string) (int, error) {
 	var player = Player{
@@ -41,4 +49,11 @@ func (Player) AddPlayer(aid int, ref, nickName, declaration, avatar string) (int
 	dao.Db.LogMode(true)
 	err := dao.Db.Create(&player).Error
 	return player.Id, err
+}
+
+// 更新参赛者票数
+func (Player) UpdatePlayerScore(id int, db *gorm.DB) error {
+	var player Player
+	err := db.Model(&player).Where("id=?", id).UpdateColumn("score", gorm.Expr("score + ?", 1)).Error
+	return err
 }

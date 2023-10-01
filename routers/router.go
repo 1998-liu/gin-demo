@@ -49,6 +49,11 @@ func InitRouter() *gin.Engine {
         player.GET("/list", controllers.PlayerController{}.GetPlayers)
 	}
 
+    vote := router.Group("/vote")
+    {
+        vote.GET("/add", controllers.VoteController{}.AddVote)
+    }
+
 	order := router.Group("/order")
 	{
 		order.POST("/list", controllers.OrderController{}.GetList)
