@@ -18,9 +18,9 @@ func InitRouter() *gin.Engine {
 	router.Use(gin.LoggerWithConfig(logger.LoggerToFile()))
 	router.Use(logger.Recover)
 
-    //使用 redis 存取 session
-    store,_ := redis.NewStore(10, "tcp", config.RedisAddress,"", []byte("secret"))
-    router.Use(sessions.Sessions("mysession", store))
+	//使用 redis 存取 session
+	store, _ := redis.NewStore(10, "tcp", config.RedisAddress, "", []byte("secret"))
+	router.Use(sessions.Sessions("mysession", store))
 
 	//注册测试
 	router.POST("/register", controllers.RegisterPost)
@@ -28,8 +28,8 @@ func InitRouter() *gin.Engine {
 	//路由组
 	user := router.Group("/user")
 	{
-        user.POST("/register", controllers.UserController{}.Register)
-        user.POST("/login", controllers.UserController{}.Login)
+		user.POST("/register", controllers.UserController{}.Register)
+		user.POST("/login", controllers.UserController{}.Login)
 		user.GET("/info", controllers.UserController{}.GetUserInfo)
 		user.POST("/list", controllers.UserController{}.GetUserList)
 		user.PUT("/add", func(ctx *gin.Context) {
@@ -37,11 +37,17 @@ func InitRouter() *gin.Engine {
 		})
 	}
 
-    activity := router.Group("/activity")
-    {
-        activity.POST("/add", controllers.ActivityController{}.AddActivity)
-        activity.GET("/del", controllers.ActivityController{}.DelActivity)
-    }
+	activity := router.Group("/activity")
+	{
+		activity.POST("/add", controllers.ActivityController{}.AddActivity)
+		activity.GET("/del", controllers.ActivityController{}.DelActivity)
+	}
+
+	player := router.Group("/player")
+	{
+		player.POST("/add", controllers.PlayerController{}.AddPlayer)
+        player.GET("/list", controllers.PlayerController{}.GetPlayers)
+	}
 
 	order := router.Group("/order")
 	{
