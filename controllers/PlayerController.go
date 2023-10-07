@@ -26,12 +26,25 @@ type Player struct {
 func (PlayerController) GetPlayers(c *gin.Context) {
 	aidStr := c.DefaultQuery("aid", "0")
 	aid, _ := strconv.Atoi(aidStr)
-	result, err := models.Player{}.GetPlayers(aid)
+	result, err := models.Player{}.GetPlayers(aid, "id desc")
 	if err != nil {
 		ReturnError(c, 4004, "没有相关信息")
 		return
 	}
 	ReturnSuccess(c, 200, "success", result, int64(len(result)))
+}
+
+// 获取排行榜
+func (PlayerController) GetRanking(c *gin.Context) {
+	aidStr := c.DefaultQuery("aid", "0")
+	aid, _ := strconv.Atoi(aidStr)
+	result, err := models.Player{}.GetPlayers(aid, "score desc")
+    count := int64(len(result))
+	if count == 0 || err != nil {
+		ReturnError(c, 4004, "没有相关信息")
+		return
+	}
+	ReturnSuccess(c, 200, "success", result, count)
 }
 
 type playerResponse struct {

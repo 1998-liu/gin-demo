@@ -8,24 +8,24 @@ import (
 )
 
 type Player struct {
-	Id          int    `gorm:"column:id"`
-	Aid         int    `gorm:"column:aid"`
-	Ref         string `gorm:"column:ref"`
-	NickName    string `gorm:"column:nickName"`
-	Declaration string `gorm:"column:declaration"`
-	Avatar      string `gorm:"column:avatar"`
-	Score       int    `gorm:"column:score"`
-	AddTime     int    `gorm:"column:addTime"`
-	UpdateTime  int    `gorm:"column:updateTime"`
+	Id          int    `gorm:"column:id" json:"id"`
+	Aid         int    `gorm:"column:aid" json:"aid"`
+	Ref         string `gorm:"column:ref" json:"ref"`
+	NickName    string `gorm:"column:nickName" json:"nickName"`
+	Declaration string `gorm:"column:declaration" json:"declaration"`
+	Avatar      string `gorm:"column:avatar" json:"avatar"`
+	Score       int    `gorm:"column:score" json:"score"`
+	AddTime     int    `gorm:"column:addTime" json:"addTime"`
+	UpdateTime  int    `gorm:"column:updateTime" json:"updateTime"`
 }
 
 func (Player) GetTableName() string {
 	return "player"
 }
 
-func (Player) GetPlayers(aid int) ([]Player, error) {
+func (Player) GetPlayers(aid int, sort string) ([]Player, error) {
 	var player []Player
-	err := dao.Db.Where("aid=?", aid).Find(&player).Error
+	err := dao.Db.Where("aid=?", aid).Order(sort).Find(&player).Error
 	return player, err
 }
 
