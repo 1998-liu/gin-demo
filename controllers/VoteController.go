@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"gin-demo/cache"
 	"gin-demo/dao"
 	"gin-demo/models"
 	"strconv"
@@ -44,6 +45,10 @@ func (VoteController) AddVote(c *gin.Context) {
 		ReturnSuccess(c, 200, "投票成功", res, 1)
 		//提交事务
 		tx.Commit()
+		//更新 redis 排行榜缓存
+		var redisKey string
+		redisKey = "ranking:" + strconv.Itoa(player.Aid)
+		cache.Rdb.ZIncrBy(cache.Rctx, redisKey, 1, pidStr)
 		return
 	}
 	//回滚事务
