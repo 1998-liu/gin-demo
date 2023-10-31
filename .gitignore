@@ -26,4 +26,5 @@ tmp
 runtime
 
 #editor
+.idea
 .vscode
